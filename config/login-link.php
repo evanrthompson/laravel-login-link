@@ -11,9 +11,16 @@ return [
 
     /*
      * Login links will only work in these hosts. In all
-     * other hosts, an exception will be thrown.
+     * other hosts, an exception will be thrown. Leave this empty to allow all hostnames (not recommended).
      */
+
     'allowed_hosts' => ['localhost'],
+
+    /*
+     * If login links should only work for specific top level domains, you can specify them here.
+     */
+
+    'allowed_tlds' => [],
 
     /*
      * The package will automatically create a user model when trying
