@@ -61,7 +61,8 @@ class LoginLinkController
             return;
         }
 
-        $currentTld = end(explode('.', $request->getHost()));
+        $currentHost = explode('.', $request->getHost());
+        $currentTld = end($currentHost);
 
         if (! in_array($currentTld, $allowedTlds)) {
             throw NotAllowedInCurrentTld::make($currentTld, $allowedTlds);
