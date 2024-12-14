@@ -18,6 +18,8 @@ class LoginLinkController
 
         $this->ensureAllowedHost($request);
 
+        $this->ensureAllowedTld($request);
+
         $authenticatable = $this->getAuthenticatable($request);
 
         $this->performLogin($request->guard, $authenticatable);
@@ -39,10 +41,30 @@ class LoginLinkController
     protected function ensureAllowedHost(LoginLinkRequest $request): void
     {
         $allowedHosts = config('login-link.allowed_hosts');
+
+        if(!count($allowedHosts)) {
+            return;
+        }
+
         $currentHost = $request->getHost();
 
         if (! in_array($currentHost, $allowedHosts)) {
             throw NotAllowedInCurrentHost::make($currentHost, $allowedHosts);
+        }
+    }
+
+    protected function ensureAllowedTld(LoginLinkRequest $request): void
+    {
+        $allowedTlds = config('login-link.allowed_tlds');
+
+        if (! count($allowedTlds)) {
+            return;
+        }
+
+        $currentTld = end(explode('.', $request->getHost()));
+
+        if (! in_array($currentTld, $allowedTlds)) {
+            throw NotAllowedInCurrentTld::make($currentTld, $allowedTlds);
         }
     }
 
